@@ -1,0 +1,27 @@
+[
+	{
+		"id": "preferences",
+		"children": [
+			{
+				"caption": "Package Settings",
+				"mnemonic": "P",
+				"id": "package-settings",
+				"children": [
+					{
+						"caption": "GunsNPrices",
+						"children": [
+							{
+								"caption": "Settings",
+								"command": "edit_settings",
+								"args": {
+									"base_file": "${packages}/GunsNPrices/GunsNPrices.sublime-settings",
+									"default": "// Settings in here override those in \"GunsNPrices/GunsNPrices.sublime-settings\"\n{\n\t$0\n}\n"
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+]

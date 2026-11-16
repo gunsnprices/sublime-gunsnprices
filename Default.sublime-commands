@@ -1,0 +1,45 @@
+[
+	{
+		"caption": "GunsNPrices: Parse Titles",
+		"command": "gunsnprices_parse_titles",
+		"args": { "output": "auto" }
+	},
+	{
+		"caption": "GunsNPrices: Parse Titles to JSON",
+		"command": "gunsnprices_parse_titles",
+		"args": { "output": "json" }
+	},
+	{
+		"caption": "GunsNPrices: Parse Titles to CSV",
+		"command": "gunsnprices_parse_titles",
+		"args": { "output": "csv" }
+	},
+	{
+		"caption": "GunsNPrices: Add Spec Columns to CSV",
+		"command": "gunsnprices_add_columns"
+	},
+	{
+		"caption": "GunsNPrices: Annotate Lines",
+		"command": "gunsnprices_annotate_lines"
+	},
+	{
+		"caption": "GunsNPrices: Clear Annotations",
+		"command": "gunsnprices_clear_annotations"
+	},
+	{
+		"caption": "GunsNPrices: Normalize Caliber",
+		"command": "gunsnprices_normalize_caliber"
+	},
+	{
+		"caption": "GunsNPrices: Cost per Round",
+		"command": "gunsnprices_cost_per_round"
+	},
+	{
+		"caption": "Preferences: GunsNPrices Settings",
+		"command": "edit_settings",
+		"args": {
+			"base_file": "${packages}/GunsNPrices/GunsNPrices.sublime-settings",
+			"default": "// Settings in here override those in \"GunsNPrices/GunsNPrices.sublime-settings\"\n{\n\t$0\n}\n"
+		}
+	}
+]

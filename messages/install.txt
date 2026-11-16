@@ -1,0 +1,27 @@
+GunsNPrices
+===========
+
+Parse gun and ammo product titles into structured data: brand, model,
+caliber, magazine capacity, barrel length, rounds per box and cost per round.
+
+Open the Command Palette and type "GunsNPrices":
+
+- Parse Titles: select one or more lines (or put the cursor on a line).
+  One title opens a popup; several open the "gunsnprices" output panel.
+- Parse Titles to JSON / to CSV: the same, as a new tab.
+- Add Spec Columns to CSV: appends parsed_kind, parsed_brand, parsed_model,
+  parsed_caliber and more columns to every row of a CSV or TSV file.
+- Annotate Lines: shows the parsed specs at the end of each line.
+  Clear Annotations removes them.
+- Normalize Caliber: replaces the selected caliber text with its standard
+  name, for example "9mm Luger" -> "9×19mm Parabellum".
+- Cost per Round: price and round count -> price of one round.
+
+Settings: Preferences > Package Settings > GunsNPrices > Settings.
+
+Everything runs on your computer. The package makes no network requests.
+The parser is open source (MIT, data CC BY 4.0) and is the one used by
+https://gunsnprices.com to group listings from US gun and ammo stores.
+
+Documentation: https://github.com/gunsnprices/sublime-gunsnprices
+Other free tools: https://gunsnprices.com/developers

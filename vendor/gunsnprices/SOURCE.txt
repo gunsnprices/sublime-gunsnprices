@@ -1,0 +1,12 @@
+This directory is a copy of the gunsnprices Python package, version 0.1.2
+(https://pypi.org/project/gunsnprices/, source https://github.com/gunsnprices/gunsnprices-python).
+
+Code: MIT License, see LICENSE in this directory.
+Data files in data/ (models.json, calibers.json): CC BY 4.0, see LICENSE-DATA.
+Copyright (c) 2026 GunsNPrices (https://gunsnprices.com).
+
+Changes made for Sublime Text:
+- calibers.py and models.py read their data files through _data.py (added) instead of
+  importlib.resources.files(), which is not available on Python 3.8 and cannot read files
+  from a .sublime-package archive. No other changes; the parser gives the same results.
+- __main__.py (the command line interface) and py.typed are not included.

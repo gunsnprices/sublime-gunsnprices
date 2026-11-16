@@ -1,0 +1,10 @@
+# Files that Package Control does not need: they stay in the repository but are left out of the
+# .sublime-package archive (Package Control builds it with git archive).
+/.github           export-ignore
+/tests             export-ignore
+/.gitattributes    export-ignore
+/.gitignore        export-ignore
+/CHANGELOG.md      export-ignore
+/PUBLISHING.md     export-ignore
+
+* text=auto eol=lf

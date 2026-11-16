@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Sublime Text runs packages with .python-version 3.8 on Python 3.8 (builds 4050-4204)
+        # and on Python 3.14 (build 4205 and newer)
+        python: ['3.8', '3.14']
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - name: Install Python ${{ matrix.python }}
+        run: uv python install ${{ matrix.python }}
+      - name: Syntax check (warnings are errors)
+        run: uv run --no-project --python ${{ matrix.python }} python -W error -m compileall -q -f gunsnprices_plugin.py core vendor tests
+      - name: Tests
+        run: uv run --no-project --python ${{ matrix.python }} python -W error::SyntaxWarning -m unittest discover -s tests -v
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+
+  python38-compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - name: No language features or standard library APIs newer than Python 3.8
+        run: uvx --python 3.13 vermin==1.9.2 -t=3.8- --violations --eval-annotations --no-tips --backport dataclasses gunsnprices_plugin.py core vendor
+
+  package-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v7
+      - name: Package Control reviewer checks
+        # the checker that runs on Package Control channel pull requests (kaste/st_package_reviewer, pinned)
+        run: >-
+          uvx --python 3.13
+          --from git+https://github.com/kaste/st_package_reviewer.git@406c008ab8551a3eda62c5388bdd0ab1dba5e9f9
+          st_package_reviewer --package-name GunsNPrices --st-build 4107 --fail-on-warnings .

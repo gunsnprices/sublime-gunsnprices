@@ -1,0 +1,22 @@
+// GunsNPrices settings. Copy the settings you want to change to the right-hand file
+// (Preferences > Package Settings > GunsNPrices > Settings).
+{
+	// Write "×" as "x" in caliber names ("9x19mm Parabellum" instead of "9×19mm Parabellum"),
+	// for feeds and databases that expect plain ASCII.
+	"ascii_caliber_names": false,
+
+	// Add the URL of each caliber's price comparison page on gunsnprices.com to results:
+	// "url" in JSON, a "caliber_url" column in CSV, and clickable caliber names in popups.
+	// Off by default. The package itself never connects to the internet.
+	"caliber_links": false,
+
+	// Columns that "GunsNPrices: Add Spec Columns to CSV" appends to each row, in this order.
+	// In the file they get the "parsed_" prefix (parsed_kind, parsed_brand, ...).
+	// Available: kind, brand, model, family, generation, configs, features, caliber, caliber_type,
+	// calibers, capacity, barrel_in, rounds, price, cost_per_round, caliber_url.
+	"spec_columns": ["kind", "brand", "model", "caliber", "capacity", "barrel_in", "rounds", "cost_per_round"],
+
+	// The most lines one command reads. Parsing takes about 1 ms per line;
+	// selections over 300 lines are parsed in the background with progress in the status bar.
+	"max_lines": 20000,
+}
