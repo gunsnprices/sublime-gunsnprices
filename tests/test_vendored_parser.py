@@ -1,5 +1,7 @@
 """The vendored copy of the gunsnprices parser: same answers as the upstream package, and data loading from archives."""
 import importlib
+import importlib.machinery
+import importlib.util
 import json
 import os
 import shutil
@@ -123,16 +125,20 @@ class DataLoadingTest(unittest.TestCase):
                         if not name.endswith(".pyc"):
                             full = os.path.join(folder, name)
                             z.write(full, os.path.relpath(full, sublime_mock.ROOT).replace(os.sep, "/"))
-            sys.path.insert(0, archive)
-            importlib.invalidate_caches()
-            zipped = importlib.import_module("vendor.gunsnprices")
+            zipped = None
+            for name, path in (("vendor", [archive]), ("vendor.gunsnprices", None)):
+                spec = importlib.machinery.PathFinder.find_spec(name, path or zipped.__path__)
+                if hasattr(spec.loader, "exec_module"):
+                    zipped = importlib.util.module_from_spec(spec)
+                    sys.modules[name] = zipped
+                    spec.loader.exec_module(zipped)
+                else:   # Python 3.8 and 3.9: zipimporter only has the older API
+                    zipped = spec.loader.load_module(name)
             self.assertIn(".sublime-package", zipped.__file__)
             self.assertIsNot(zipped, gnp)
             info = zipped.parse_title("Glock 19 Gen 5 MOS 9mm 4.02in 15rd Pistol")
             self.assertEqual((info.model.model, info.caliber.name), ("Glock 19 Gen 5 MOS", "9\u00d719mm Parabellum"))
         finally:
-            if archive in sys.path:
-                sys.path.remove(archive)
             for name in [m for m in sys.modules if m == "vendor" or m.startswith("vendor.")]:
                 del sys.modules[name]
             shutil.rmtree(tmp)
