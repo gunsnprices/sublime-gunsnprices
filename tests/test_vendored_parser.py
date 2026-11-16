@@ -3,7 +3,6 @@ import importlib
 import json
 import os
 import shutil
-import subprocess
 import sys
 import tempfile
 import unittest
@@ -116,21 +115,26 @@ class DataLoadingTest(unittest.TestCase):
     def test_imports_and_parses_from_a_zip_archive(self):
         """Like an installed .sublime-package: the modules and data files exist only inside a zip file."""
         tmp = tempfile.mkdtemp()
+        archive = os.path.join(tmp, "GunsNPrices.sublime-package")
         try:
-            archive = os.path.join(tmp, "GunsNPrices.sublime-package")
             with zipfile.ZipFile(archive, "w") as z:
                 for folder, _, files in os.walk(os.path.join(sublime_mock.ROOT, "vendor")):
                     for name in files:
                         if not name.endswith(".pyc"):
                             full = os.path.join(folder, name)
                             z.write(full, os.path.relpath(full, sublime_mock.ROOT).replace(os.sep, "/"))
-            code = ("import sys; sys.path.insert(0, sys.argv[1]); import vendor.gunsnprices as g; "
-                    "assert '.sublime-package' in g.__file__; "
-                    "i = g.parse_title('Glock 19 Gen 5 MOS 9mm 4.02in 15rd Pistol'); "
-                    "print(i.model.model, '|', i.caliber.id)")
-            out = subprocess.check_output([sys.executable, "-I", "-B", "-c", code, archive], cwd=tmp)
-            self.assertEqual(out.decode("ascii").strip(), "Glock 19 Gen 5 MOS | 9x19mmparabellum")
+            sys.path.insert(0, archive)
+            importlib.invalidate_caches()
+            zipped = importlib.import_module("vendor.gunsnprices")
+            self.assertIn(".sublime-package", zipped.__file__)
+            self.assertIsNot(zipped, gnp)
+            info = zipped.parse_title("Glock 19 Gen 5 MOS 9mm 4.02in 15rd Pistol")
+            self.assertEqual((info.model.model, info.caliber.name), ("Glock 19 Gen 5 MOS", "9\u00d719mm Parabellum"))
         finally:
+            if archive in sys.path:
+                sys.path.remove(archive)
+            for name in [m for m in sys.modules if m == "vendor" or m.startswith("vendor.")]:
+                del sys.modules[name]
             shutil.rmtree(tmp)
 
     def test_falls_back_to_sublime_load_resource(self):

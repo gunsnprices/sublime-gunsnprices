@@ -19,6 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: false
       - name: Install Python ${{ matrix.python }}
         run: uv python install ${{ matrix.python }}
       - name: Syntax check (warnings are errors)
@@ -33,6 +35,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: false
       - name: No language features or standard library APIs newer than Python 3.8
         run: uvx --python 3.13 vermin==1.9.2 -t=3.8- --violations --eval-annotations --no-tips --backport dataclasses gunsnprices_plugin.py core vendor
 
@@ -43,6 +47,8 @@ jobs:
         with:
           fetch-depth: 0
       - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: false
       - name: Package Control reviewer checks
         # the checker that runs on Package Control channel pull requests (kaste/st_package_reviewer, pinned)
         run: >-
